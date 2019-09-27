@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[hexo-use]]></title>
+    <url>%2F2019%2F09%2F27%2Fhexo-use%2F</url>
+    <content type="text"><![CDATA[新建文章 12hexo new hello-world创建的文章会出现在 source/_posts 文件夹下，是 MarkDown 格式 标签页 123456789101112131415161718192021现在我们的博客只有首页、文章页，如果我们想要增加标签页，可以自行添加，这里 Hexo 也给我们提供了这个功能，在根目录执行命令如下：hexo new page tags执行这个命令之后会自动帮我们生成一个 source/tags/index.md 文件，内容就只有这样子的：---title: tagsdate: 2019-09-26 16:44:17---我们可以自行添加一个 type 字段来指定页面的类型：type: tagscomments: false然后再在主题的 _config.yml 文件将这个页面的链接添加到主菜单里面，修改 menu 字段如下menu: home: / || home #about: /about/ || user tags: /tags/ || tags #categories: /categories/ || th archives: /archives/ || archive #schedule: /schedule/ || calendar #sitemap: /sitemap.xml || sitemap #commonweal: /404/ || heartbeat然后重启项目 分类页 12345678910111213141516分类功能和标签类似，一个文章可以对应某个分类，如果要增加分类页面可以使用如下命令创建hexo new page categories然后同样地，会生成一个 source/categories/index.md 文件。我们可以自行添加一个 type 字段来指定页面的类型：type: categoriescomments: false然后再在主题的 _config.yml 文件将这个页面的链接添加到主菜单里面，修改 menu 字段如下menu: home: / || home #about: /about/ || user tags: /tags/ || tags categories: /categories/ || th archives: /archives/ || archive #schedule: /schedule/ || calendar #sitemap: /sitemap.xml || sitemap #commonweal: /404/ || heartbeat]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2019%2F09%2F27%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
