@@ -55,32 +55,33 @@
   };
 </script>
 
-  <meta name="description" content="主要是学习工作中的笔记">
+  <meta name="description" content="[TOC] 基础 Series数据类型numpy的一维数组(array)和对应的一个索引组成,也类似于python数据类型里的字典1234567891011121314151617181920#列表、字典和Series的转化s1 = pd.Series([1,3,5,7],index=[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;]">
 <meta name="keywords" content="python,java,爬虫,数据分析">
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:title" content="perfey">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/09/27/pandas使用/index.html">
 <meta property="og:site_name" content="perfey">
-<meta property="og:description" content="主要是学习工作中的笔记">
+<meta property="og:description" content="[TOC] 基础 Series数据类型numpy的一维数组(array)和对应的一个索引组成,也类似于python数据类型里的字典1234567891011121314151617181920#列表、字典和Series的转化s1 = pd.Series([1,3,5,7],index=[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;]">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-27T10:04:24.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="perfey">
-<meta name="twitter:description" content="主要是学习工作中的笔记">
-  <link rel="canonical" href="http://yoursite.com/">
+<meta name="twitter:description" content="[TOC] 基础 Series数据类型numpy的一维数组(array)和对应的一个索引组成,也类似于python数据类型里的字典1234567891011121314151617181920#列表、字典和Series的转化s1 = pd.Series([1,3,5,7],index=[&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;,&amp;quot;d&amp;quot;]">
+  <link rel="canonical" href="http://yoursite.com/2019/09/27/pandas使用/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>perfey</title>
+  <title> | perfey</title>
   
 
 
@@ -240,12 +241,13 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+
   <div id="posts" class="posts-expand">
-        <article itemscope itemtype="http://schema.org/Article">
+      <article itemscope itemtype="http://schema.org/Article">
   
   
   
-  <div class="post-block home">
+  <div class="post-block post">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/pandas使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -259,8 +261,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/09/27/pandas使用/" class="post-title-link" itemprop="url">未命名</a>
+
           
         </h1>
 
@@ -290,7 +291,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>[TOC]</p>
+        <p>[TOC]</p>
 <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ul>
 <li>Series数据类型<br>numpy的一维数组(array)和对应的一个索引组成,也类似于python数据类型里的字典<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#列表、字典和Series的转化</span><br><span class="line"></span><br><span class="line">s1 = pd.Series([1,3,5,7],index=[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;])</span><br><span class="line">s2=pd.Series(&#123;&quot;a&quot;:4,&quot;b&quot;:2,&quot;c&quot;:1,&quot;d&quot;:8&#125;)</span><br><span class="line">s1 +s2  # Series可以自动对齐,使得相同索引的值进行相加</span><br><span class="line">li = list(s1) # [1, 3, 5, 7]</span><br><span class="line">dic = dict(s1) #&#123;&apos;a&apos;: 1, &apos;b&apos;: 3, &apos;c&apos;: 5, &apos;d&apos;: 7&#125;</span><br><span class="line"></span><br><span class="line"># array和Series转化</span><br><span class="line">a1 = np.random.randint(0,10,(5,))  # 这是个一维数组 array类型</span><br><span class="line"># array([8, 5, 3, 4, 5])</span><br><span class="line">s1 = pd.Series(a1)</span><br><span class="line">索引 值</span><br><span class="line">0    8</span><br><span class="line">1    9</span><br><span class="line">2    4</span><br><span class="line">3    4</span><br><span class="line">4    9</span><br><span class="line">np.array(s1)   # 转化会numpy类型</span><br><span class="line"># array([8, 9, 4, 4, 9])</span><br></pre></td></tr></table></figure>
 
@@ -337,205 +338,43 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">忽略警告设置</span><br><span class="line">pd.set_option(&apos;mode.chained_assignment&apos;, None)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from datetime import datetime, timedelta</span><br><span class="line">baidu = pd.DataFrame(db.baiduheat.find(&#123;&quot;name&quot;: name&#125;, &#123;&quot;_id&quot;: 0&#125;).limit(31).sort([(&quot;_id&quot;, -1)]))</span><br><span class="line">df1 = pd.DataFrame(db.weixinheat.find(&#123;&quot;name&quot;: name&#125;, &#123;&quot;_id&quot;: 0&#125;).sort([(&quot;_id&quot;, -1)]).limit(1))</span><br><span class="line">weibo = pd.DataFrame(db.weiheat.find(&#123;&quot;name&quot;: name&#125;,&#123;&quot;_id&quot;: 0&#125;).sort([(&quot;_id&quot;, -1)]).limit(31))</span><br><span class="line">df2 = pd.concat([pd.Series(row[&apos;weixin_index&apos;].split(&apos;,&apos;)) for _, row in df1.iterrows()]).reset_index()</span><br><span class="line">weixinheat = list(df2[0])</span><br><span class="line">weixinheat.reverse()</span><br><span class="line">df2[&quot;weixinheat&quot;] = weixinheat</span><br><span class="line">df2[&quot;date&quot;] = [(datetime.strptime(df1[&quot;date&quot;][0], &quot;%Y-%m-%d&quot;) - timedelta(days=i)).strftime(&apos;%Y-%m-%d&apos;) for</span><br><span class="line">               i in range(len(df2))]</span><br><span class="line">all = pd.merge(pd.merge(baidu, weibo, on=&quot;date&quot;, how=&quot;outer&quot;), df2, on=&quot;date&quot;, how=&quot;outer&quot;)</span><br><span class="line">final_all = all.head(30)</span><br><span class="line">final_all.drop([&quot;name_x&quot;, &quot;name_y&quot;, 0, &quot;media&quot;, &quot;uid&quot;, &quot;index&quot;], axis=1, inplace=True)   //删除不要的字段</span><br><span class="line">final_all.rename(index=str, inplace=True,</span><br><span class="line">                 columns=&#123;&quot;date&quot;: &quot;日期&quot;, &quot;message&quot;: &quot;资讯指数&quot;, &quot;search&quot;: &quot;搜索指数&quot;, &quot;weiheat&quot;: &quot;微博指数&quot;,</span><br><span class="line">                          &quot;weixinheat&quot;: &quot;微信指数&quot;&#125;)  //重命名</span><br><span class="line">res = json.loads(final_all.to_json(orient=&apos;records&apos;))  //dataframe转化为json</span><br></pre></td></tr></table></figure>
-        
-      
     </div>
 
     
     
     
+        
+      
+
       <footer class="post-footer">
-          <div class="post-eof"></div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/27/hexo-use/" rel="next" title="hexo-use">
+                  <i class="fa fa-chevron-left"></i> hexo-use
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
         
       </footer>
+    
   </div>
   
   
   
   </article>
 
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/hexo-use/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="perfey">
-      <meta itemprop="description" content="主要是学习工作中的笔记">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="perfey">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/09/27/hexo-use/" class="post-title-link" itemprop="url">hexo-use</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-27 17:25:39 / 修改时间：17:38:00" itemprop="dateCreated datePublished" datetime="2019-09-27T17:25:39+08:00">2019-09-27</time>
-            </span>
-          
-            
-
-            
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><p>新建文章</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new hello-world</span><br><span class="line">创建的文章会出现在 source/_posts 文件夹下，是 MarkDown 格式</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>标签页</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">现在我们的博客只有首页、文章页，如果我们想要增加标签页，可以自行添加，这里 Hexo 也给我们提供了这个功能，在根目录执行命令如下：</span><br><span class="line">hexo new page tags</span><br><span class="line">执行这个命令之后会自动帮我们生成一个 source/tags/index.md 文件，内容就只有这样子的：</span><br><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2019-09-26 16:44:17</span><br><span class="line">---</span><br><span class="line">我们可以自行添加一个 type 字段来指定页面的类型：</span><br><span class="line">type: tags</span><br><span class="line">comments: false</span><br><span class="line">然后再在主题的 _config.yml 文件将这个页面的链接添加到主菜单里面，修改 menu 字段如下</span><br><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  #categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  #schedule: /schedule/ || calendar</span><br><span class="line">  #sitemap: /sitemap.xml || sitemap</span><br><span class="line">  #commonweal: /404/ || heartbeat</span><br><span class="line">然后重启项目</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>分类页</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">分类功能和标签类似，一个文章可以对应某个分类，如果要增加分类页面可以使用如下命令创建</span><br><span class="line">hexo new page categories</span><br><span class="line">然后同样地，会生成一个 source/categories/index.md 文件。</span><br><span class="line">我们可以自行添加一个 type 字段来指定页面的类型：</span><br><span class="line">type: categories</span><br><span class="line">comments: false</span><br><span class="line">然后再在主题的 _config.yml 文件将这个页面的链接添加到主菜单里面，修改 menu 字段如下</span><br><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  <span class="comment">#schedule: /schedule/ || calendar</span></span><br><span class="line">  <span class="comment">#sitemap: /sitemap.xml || sitemap</span></span><br><span class="line">  <span class="comment">#commonweal: /404/ || heartbeat</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
   </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="perfey">
-      <meta itemprop="description" content="主要是学习工作中的笔记">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="perfey">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2019/09/27/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2019-09-27 15:48:24" itemprop="dateCreated datePublished" datetime="2019-09-27T15:48:24+08:00">2019-09-27</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-  </div>
-
-  
 
 
           </div>
@@ -554,6 +393,11 @@
 
   <aside class="sidebar">
     <div class="sidebar-inner">
+        
+        
+        
+        
+      
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
@@ -566,6 +410,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方法"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a></li></ol></div>
+        
       </div>
       <!--/noindex-->
 
