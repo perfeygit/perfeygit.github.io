@@ -68,6 +68,10 @@
       border-color: rgba(255, 165, 0, .8);
       box-shadow: 0 0 30px rgba(255, 165, 0, .35), inset 0 0 20px rgba(255, 165, 0, .08);
     }
+    .card:nth-child(4):hover {
+      border-color: rgba(255, 64, 129, .8);
+      box-shadow: 0 0 30px rgba(255, 64, 129, .35), inset 0 0 20px rgba(255, 64, 129, .08);
+    }
     .card .icon { font-size: 3.2em; }
     .card h2 { margin: 14px 0 8px; font-size: 1.25em; }
     .card p { color: #9fa8da; font-size: .88em; line-height: 1.6; }
@@ -137,6 +141,11 @@
     <h2>坦克大战</h2>
     <p>保卫阵地 消灭全部敌人<br>砖墙可摧毁 钢墙不可破</p>
   </div>
+  <div class="card" onclick="startGame('match3')">
+    <div class="icon">🍭</div>
+    <h2>开心消消乐</h2>
+    <p>三连消除 连锁翻倍<br>鼠标点击交换相邻图案</p>
+  </div>
 </div>
 
 <div id="gameView">
@@ -160,11 +169,12 @@ const ctx = canvas.getContext('2d');
 
 let current = null, currentName = null, lastTs = 0;
 
-const TITLES = { tetris: '🧱 俄罗斯方块', snake: '🐍 贪吃蛇', tank: '🚜 坦克大战' };
+const TITLES = { tetris: '🧱 俄罗斯方块', snake: '🐍 贪吃蛇', tank: '🚜 坦克大战', match3: '🍭 开心消消乐' };
 const HELP = {
   tetris: '← → 移动　↑ 旋转　↓ 软降　空格 硬降　P 暂停　R 重开',
   snake:  '↑ ↓ ← → / WASD 转向　P 暂停　R 重开',
-  tank:   'WASD / 方向键 移动　空格 / J 开火　P 暂停　R 重开'
+  tank:   'WASD / 方向键 移动　空格 / J 开火　P 暂停　R 重开',
+  match3: '鼠标点击交换相邻图案　三连消除　连锁翻倍　目标 3000 分　R 重开'
 };
 
 function startGame(name) {
@@ -707,6 +717,245 @@ GAMES.tank = function () {
     onKeyUp(k) { onKeyUpState(k); },
     togglePause() { if (!over && !win) paused = !paused; }
   };
+};
+
+/* ================= 开心消消乐 ================= */
+GAMES.match3 = function () {
+  const N = 8, CELL = 60, W = N * CELL, TYPES = 6, TARGET = 3000;
+  canvas.width = canvas.height = W;
+
+  const COLORS = ['#ff1744', '#3d5afe', '#00e676', '#ffd740', '#d500f9', '#ff9100'];
+
+  let grid, sel, score, combo, state, flashTimer, fallTimer, cleared, offsets, paused;
+
+  const rand = () => Math.floor(Math.random() * TYPES);
+
+  function makeGrid() {
+    grid = [];
+    for (let r = 0; r < N; r++) {
+      grid[r] = [];
+      for (let c = 0; c < N; c++) {
+        let t;
+        do { t = rand(); }
+        while ((c >= 2 && grid[r][c - 1] === t && grid[r][c - 2] === t) ||
+               (r >= 2 && grid[r - 1][c] === t && grid[r - 2][c] === t));
+        grid[r][c] = t;
+      }
+    }
+  }
+
+  // 找出所有三连以上的格子，返回 Set(r*N+c)
+  function findMatches() {
+    const set = new Set();
+    for (let r = 0; r < N; r++) {
+      let c = 0;
+      while (c < N) {
+        let k = c + 1;
+        while (k < N && grid[r][k] === grid[r][c]) k++;
+        if (k - c >= 3 && grid[r][c] !== null) for (let j = c; j < k; j++) set.add(r * N + j);
+        c = k;
+      }
+    }
+    for (let c = 0; c < N; c++) {
+      let r = 0;
+      while (r < N) {
+        let k = r + 1;
+        while (k < N && grid[k][c] === grid[r][c]) k++;
+        if (k - r >= 3 && grid[r][c] !== null) for (let j = r; j < k; j++) set.add(j * N + c);
+        r = k;
+      }
+    }
+    return set;
+  }
+
+  function hasMoves() {
+    const swap = (r1, c1, r2, c2) => { const t = grid[r1][c1]; grid[r1][c1] = grid[r2][c2]; grid[r2][c2] = t; };
+    for (let r = 0; r < N; r++)
+      for (let c = 0; c < N; c++) {
+        if (c < N - 1) {
+          swap(r, c, r, c + 1);
+          const m = findMatches().size;
+          swap(r, c, r, c + 1);
+          if (m) return true;
+        }
+        if (r < N - 1) {
+          swap(r, c, r + 1, c);
+          const m = findMatches().size;
+          swap(r, c, r + 1, c);
+          if (m) return true;
+        }
+      }
+    return false;
+  }
+
+  function applyGravity() {
+    offsets = Array.from({ length: N }, () => Array(N).fill(0));
+    for (let c = 0; c < N; c++) {
+      let write = N - 1;
+      for (let r = N - 1; r >= 0; r--) {
+        if (grid[r][c] !== null) {
+          if (write !== r) { grid[write][c] = grid[r][c]; grid[r][c] = null; }
+          offsets[write][c] = write - r;   // 下落了几格
+          write--;
+        }
+      }
+      const spawn = write + 1;             // 新生成的从棋盘上方掉落
+      for (let r = write; r >= 0; r--) {
+        grid[r][c] = rand();
+        offsets[r][c] = spawn;
+      }
+    }
+  }
+
+  function resolve(set, mult) {
+    cleared = set;
+    combo = mult;
+    score += set.size * 20 * mult;
+    state = 'flash';
+    flashTimer = 220;
+    hud();
+    beep(600 + mult * 200, .12);
+  }
+
+  function hud() { setHud(`得分 ${score}/${TARGET}　连击 ×${Math.max(1, combo)}`); }
+
+  function reset() {
+    makeGrid();
+    sel = null; score = 0; combo = 0;
+    state = 'idle'; paused = false;
+    hud();
+  }
+
+  /* ---- 鼠标交互 ---- */
+  function onClick(e) {
+    if (state !== 'idle' || paused) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * W / rect.width;
+    const y = (e.clientY - rect.top) * W / rect.height;
+    const r = Math.floor(y / CELL), c = Math.floor(x / CELL);
+    if (r < 0 || r >= N || c < 0 || c >= N) return;
+
+    if (sel && Math.abs(sel[0] - r) + Math.abs(sel[1] - c) === 1) {
+      // 与已选格子相邻 → 尝试交换
+      const [r1, c1] = sel;
+      const t = grid[r1][c1]; grid[r1][c1] = grid[r][c]; grid[r][c] = t;
+      const m = findMatches();
+      if (m.size) { sel = null; resolve(m, 1); }
+      else {   // 无效交换，换回来
+        grid[r][c] = grid[r1][c1]; grid[r1][c1] = t;
+        beep(180, .1);
+      }
+      sel = null;
+    } else if (sel && sel[0] === r && sel[1] === c) {
+      sel = null;   // 再点自己取消选择
+    } else {
+      sel = [r, c];
+      beep(440, .04);
+    }
+  }
+  canvas.addEventListener('click', onClick);
+  function destroy() { canvas.removeEventListener('click', onClick); }
+
+  function onKey(k) {
+    if (k === 'r' || k === 'R' || k === 'Enter') { reset(); return; }
+    if (k === 'p' || k === 'P') paused = !paused;
+  }
+
+  function update(dt) {
+    if (paused) return;
+    if (state === 'flash') {
+      flashTimer -= dt;
+      if (flashTimer <= 0) {
+        cleared.forEach(i => { grid[Math.floor(i / N)][i % N] = null; });
+        applyGravity();
+        state = 'fall';
+        fallTimer = 180;
+      }
+    } else if (state === 'fall') {
+      fallTimer -= dt;
+      if (fallTimer <= 0) {
+        const m = findMatches();
+        if (m.size) resolve(m, combo + 1);
+        else {
+          combo = 0; hud();
+          if (score >= TARGET) { state = 'win'; beep(1200, .3); }
+          else if (!hasMoves()) { makeGrid(); beep(700, .15); }   // 无解自动洗牌
+          else state = 'idle';
+        }
+      }
+    }
+  }
+
+  /* ---- 六种形状 ---- */
+  function drawShape(x, y, t, scale) {
+    const cx = x + CELL / 2, cy = y + CELL / 2;
+    const R = (CELL / 2 - 7) * scale;
+    ctx.fillStyle = COLORS[t];
+    ctx.beginPath();
+    if (t === 0) {                                  // 圆
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    } else if (t === 1) {                           // 方
+      ctx.rect(cx - R, cy - R, R * 2, R * 2);
+    } else if (t === 2) {                           // 三角
+      ctx.moveTo(cx, cy - R); ctx.lineTo(cx + R, cy + R * .8); ctx.lineTo(cx - R, cy + R * .8);
+    } else if (t === 3) {                           // 菱形
+      ctx.moveTo(cx, cy - R); ctx.lineTo(cx + R, cy); ctx.lineTo(cx, cy + R); ctx.lineTo(cx - R, cy);
+    } else if (t === 4) {                           // 六边形
+      for (let i = 0; i < 6; i++) {
+        const a = Math.PI / 3 * i - Math.PI / 2;
+        i ? ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R)
+          : ctx.moveTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      }
+    } else {                                        // 五角星
+      for (let i = 0; i < 10; i++) {
+        const rad = i % 2 ? R * .45 : R;
+        const a = Math.PI / 5 * i - Math.PI / 2;
+        i ? ctx.lineTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad)
+          : ctx.moveTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad);
+      }
+    }
+    ctx.closePath();
+    ctx.fill();
+    // 高光
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.beginPath();
+    ctx.arc(cx - R * .3, cy - R * .35, R * .18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function draw() {
+    ctx.fillStyle = '#0d0d1a';
+    ctx.fillRect(0, 0, W, W);
+    // 棋盘底色
+    for (let r = 0; r < N; r++)
+      for (let c = 0; c < N; c++) {
+        if ((r + c) % 2) { ctx.fillStyle = 'rgba(255,255,255,.03)'; ctx.fillRect(c * CELL, r * CELL, CELL, CELL); }
+      }
+    // 棋子
+    const fallP = state === 'fall' ? fallTimer / 180 : 0;   // 1→0 下落进度
+    for (let r = 0; r < N; r++)
+      for (let c = 0; c < N; c++) {
+        if (grid[r][c] === null) continue;
+        const i = r * N + c;
+        let y = r * CELL, scale = 1;
+        if (state === 'fall') y -= (offsets[r][c] || 0) * CELL * fallP;
+        if (state === 'flash' && cleared.has(i)) scale = Math.max(0, flashTimer / 220);   // 消除时缩小
+        if (sel && sel[0] === r && sel[1] === c) {
+          // 选中格：脉冲白框
+          const p = 4 + Math.sin(Date.now() / 140) * 1.5;
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(c * CELL + p, r * CELL + p, CELL - p * 2, CELL - p * 2);
+          scale = 1.12;
+        }
+        drawShape(c * CELL, y, grid[r][c], scale);
+      }
+    if (paused) drawOverlay(ctx, W, W, '暂停中', '按 P 继续');
+    if (state === 'win') drawOverlay(ctx, W, W, '🏆 达成 3000 分！', `得分 ${score}　按 R 再来一局`);
+  }
+
+  reset();
+  return { update, draw, onKey, destroy, togglePause() { paused = !paused; } };
 };
 </script>
 </body>
